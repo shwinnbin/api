@@ -26,13 +26,15 @@ class Api extends Component {
 
     const outputs = await awsApiGateway(awsApiGatewayInputs)
 
-    this.ui.log()
-    this.ui.output('id', ` ${outputs.id}`)
-    this.ui.output('url', `${outputs.url}`)
-    this.ui.output('endpoints', `${outputs.endpoints.length}`)
+    let endpointsOutputValue = `\n`
     for (const endpoint of outputs.endpoints) {
-      this.ui.log(`  - ${endpoint.method} ${endpoint.path}`)
+      endpointsOutputValue = `${endpointsOutputValue}    - ${endpoint.method} ${endpoint.path}\n`
     }
+
+    this.ui.log()
+    this.ui.output('id', `       ${outputs.id}`)
+    this.ui.output('url', `      ${outputs.url}`)
+    this.ui.output('endpoints', `${endpointsOutputValue}`)
 
     return outputs
   }
