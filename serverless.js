@@ -2,7 +2,7 @@ const { Component } = require('@serverless/components')
 
 class Api extends Component {
   async default(inputs = {}) {
-    this.ui.status('Deploying')
+    this.context.status('Deploying')
 
     // todo quick fix for array of objects in yaml issue
     inputs.endpoints = Object.keys(inputs.endpoints).map((e) => inputs.endpoints[e])
@@ -26,21 +26,11 @@ class Api extends Component {
 
     const outputs = await awsApiGateway(awsApiGatewayInputs)
 
-    let endpointsOutputValue = `\n`
-    for (const endpoint of outputs.endpoints) {
-      endpointsOutputValue = `${endpointsOutputValue}    - ${endpoint.method} ${endpoint.path}\n`
-    }
-
-    this.ui.log()
-    this.ui.output('id', `       ${outputs.id}`)
-    this.ui.output('url', `      ${outputs.url}`)
-    this.ui.output('endpoints', `${endpointsOutputValue}`)
-
     return outputs
   }
 
   async remove(inputs = {}) {
-    this.ui.status('Removing')
+    this.context.status('Removing')
     const awsApiGateway = await this.load('@serverless/aws-api-gateway')
 
     const outputs = await awsApiGateway.remove(inputs)
