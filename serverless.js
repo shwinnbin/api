@@ -1,4 +1,4 @@
-const { Component } = require('@serverless/components')
+const { Component } = require('@serverless/core')
 
 class Api extends Component {
   async default(inputs = {}) {
