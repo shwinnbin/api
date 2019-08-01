@@ -24,7 +24,7 @@ The provider agnostic API Gateway Framework, powered by [Serverless Components](
 ### 1. Install
 
 ```shell
-$ npm install -g @serverless/components
+$ npm install -g serverless
 ```
 
 ### 2. Create
@@ -34,8 +34,12 @@ Just create the following simple boilerplate:
 ```shell
 $ touch serverless.yml # more info in the "Configure" section below
 $ touch index.js       # your lambda code
-$ touch .env           # your development AWS api keys
-$ touch .env.prod      # your production AWS api keys
+$ touch .env           # your AWS api keys
+```
+```
+# .env
+AWS_ACCESS_KEY_ID=XXX
+AWS_SECRET_ACCESS_KEY=XXX
 ```
 
 the `index.js` file should look something like this:
@@ -73,13 +77,6 @@ module.exports.auth = async (event, context) => {
   }
 }
 
-```
-
-the `.env` files are not required if you have the aws keys set globally and you want to use a single stage, but they should look like this.
-
-```
-AWS_ACCESS_KEY_ID=XXX
-AWS_SECRET_ACCESS_KEY=XXX
 ```
 
 Keep reading for info on how to set up the `serverless.yml` file.
@@ -122,12 +119,12 @@ restApi:
     endpoints:
       - path: /users
         method: POST
-        function: ${comp:createUser}
-        authorizer: ${comp:auth}
+        function: ${createUser}
+        authorizer: ${auth}
       - path: /users
         method: GET
-        function: ${comp:getUsers}
-        authorizer: ${comp:auth}
+        function: ${getUsers}
+        authorizer: ${auth}
 ```
 
 #### Extending REST APIs
@@ -158,38 +155,16 @@ restApi:
     endpoints:
       - path: /users
         method: POST
-        function: ${comp:createUser}
+        function: ${createUser}
       - path: /users
         method: GET
-        function: ${comp:getUsers}
+        function: ${getUsers}
 ```
 
 ### 4. Deploy
 
 ```shell
-api (master)$ components
-
-  myApig › outputs:
-  id:  'e4asreichk'
-  endpoints:  [ { path: '/users',
-    method: 'POST',
-    function:
-     'arn:aws:lambda:us-east-1:552750238291:function:rest-api-create-user',
-    url:
-     'https://e4asreichk.execute-api.us-east-1.amazonaws.com/dev/users',
-    id: 'jkgqlqjnf2' },
-  { path: '/users',
-    method: 'GET',
-    function:
-     'arn:aws:lambda:us-east-1:552750238291:function:rest-api-get-users',
-    url:
-     'https://e4asreichk.execute-api.us-east-1.amazonaws.com/dev/users',
-    id: 'h7zh3r' } ]
-
-
-  38s › dev › rest-api › done
-
-api (master)$
+$ serverless
 
 ```
 
